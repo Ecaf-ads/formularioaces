@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ACES · Cadastro de Empresas por Núcleo — Sinop/MT</title>
+<meta name="description" content="Formulário de cadastro das empresas associadas e parceiras da ACES, organizado por núcleos empresariais de Sinop/MT.">
+<meta property="og:title" content="ACES · Cadastro de Empresas por Núcleo">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="pt_BR">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F6F4EF; --bg-2:#EFEBE2; --paper:#FFFEFB;
+  --ink:#191D29; --ink-2:#3A3F4E; --muted:#737888;
+  --line:rgba(25,29,41,.12); --line-soft:rgba(25,29,41,.07);
+  --gold:#C2A05A; --success:#2F7D5B; --danger:#C0392B;
+  --accent:#1F4E5F; --accent-soft:rgba(31,78,95,.12); --accent-tint:rgba(31,78,95,.07);
+  --shadow-sm:0 1px 2px rgba(25,29,41,.05), 0 6px 18px rgba(25,29,41,.06);
+  --shadow-md:0 14px 44px rgba(25,29,41,.12), 0 2px 8px rgba(25,29,41,.06);
+  --shadow-lg:0 34px 80px rgba(25,29,41,.18);
+  --r-sm:11px; --r-md:18px; --r-lg:26px;
+  --ease:cubic-bezier(.22,.61,.36,1); --maxw:980px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Hanken Grotesk',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased;position:relative;min-height:100vh;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(900px 620px at 8% -8%,var(--accent-soft),transparent 60%),radial-gradient(820px 700px at 108% 4%,rgba(194,160,90,.10),transparent 55%);transition:background .6s var(--ease)}
+body::after{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.5;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.03'/%3E%3C/svg%3E")}
+.wrap{position:relative;z-index:1;max-width:var(--maxw);margin:0 auto;padding:0 24px}
+.display{font-family:'Bricolage Grotesque',Georgia,serif;font-weight:700;line-height:1.04;letter-spacing:-.015em}
+.eyebrow{font-size:.72rem;font-weight:600;letter-spacing:.26em;text-transform:uppercase;color:var(--accent);display:inline-flex;align-items:center;gap:10px}
+.eyebrow::before{content:"";width:26px;height:1px;background:var(--gold)}
+
+/* topbar */
+.topbar{position:sticky;top:0;z-index:40;background:rgba(246,244,239,.85);backdrop-filter:blur(12px);border-bottom:1px solid var(--line-soft)}
+.topbar-inner{max-width:var(--maxw);margin:0 auto;padding:13px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.brand{display:flex;align-items:center;gap:12px;cursor:pointer;text-decoration:none;color:var(--ink)}
+.brand .mark{width:40px;height:40px;border-radius:12px;flex:none;background:linear-gradient(135deg,var(--accent),#10303b);display:grid;place-items:center;color:#fff;font-family:'Bricolage Grotesque',serif;font-weight:800;font-size:1.05rem;box-shadow:var(--shadow-sm);transition:background .6s var(--ease)}
+.brand .name{font-family:'Bricolage Grotesque',serif;font-weight:700;font-size:1.18rem;line-height:1}
+.brand .sub{font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.toplink{font-size:.82rem;color:var(--muted);text-decoration:none;transition:color .2s}
+.toplink:hover{color:var(--accent)}
+
+/* botões */
+.btn{font-family:inherit;font-size:.95rem;font-weight:600;cursor:pointer;border:none;padding:14px 28px;border-radius:999px;transition:transform .25s var(--ease),box-shadow .25s var(--ease),filter .2s;display:inline-flex;align-items:center;justify-content:center;gap:10px;text-decoration:none}
+.btn-primary{background:var(--accent);color:#fff;box-shadow:0 8px 22px var(--accent-soft)}
+.btn-primary:hover{filter:brightness(.93);transform:translateY(-2px)}
+.btn-dark{background:var(--ink);color:#fff}.btn-dark:hover{transform:translateY(-2px);filter:brightness(1.15)}
+.btn-ghost{background:transparent;color:var(--accent);border:1px solid var(--line)}
+.btn-ghost:hover{border-color:var(--accent);background:var(--accent-tint)}
+.btn-arrow svg{transition:transform .25s var(--ease)}.btn-arrow:hover svg{transform:translateX(4px)}
+.btn:disabled{opacity:.45;cursor:not-allowed;transform:none!important;box-shadow:none;filter:none}
+
+.screen{display:none}.screen.active{display:block;animation:fadeUp .55s var(--ease)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+
+/* hero */
+.hero{padding:56px 0 28px;text-align:center}
+.hero h1{font-size:clamp(2.3rem,5.4vw,3.9rem);margin:18px auto 16px;max-width:17ch}
+.hero h1 em{font-style:normal;color:var(--accent);transition:color .6s var(--ease)}
+.hero p.lead{font-size:1.08rem;color:var(--muted);max-width:54ch;margin:0 auto}
+.hero .pick{font-family:'Bricolage Grotesque',serif;font-weight:600;font-size:1.05rem;margin:38px 0 18px}
+.nuc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.nuc-card{background:var(--paper);border:1px solid var(--line-soft);border-radius:var(--r-md);padding:26px 24px;text-align:left;cursor:pointer;position:relative;overflow:hidden;box-shadow:var(--shadow-sm);transition:transform .3s var(--ease),box-shadow .3s var(--ease),border-color .3s;opacity:0;animation:cardIn .55s var(--ease) forwards}
+.nuc-card::before{content:"";position:absolute;top:0;left:0;height:4px;width:100%;background:var(--nc);transform:scaleX(0);transform-origin:left;transition:transform .35s var(--ease)}
+.nuc-card:hover{transform:translateY(-6px);box-shadow:var(--shadow-md);border-color:var(--nc)}
+.nuc-card:hover::before{transform:scaleX(1)}
+@keyframes cardIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+.nuc-ico{width:52px;height:52px;border-radius:14px;display:grid;place-items:center;margin-bottom:16px;background:var(--nc-tint);color:var(--nc);transition:transform .3s var(--ease)}
+.nuc-card:hover .nuc-ico{transform:scale(1.08) rotate(-4deg)}
+.nuc-ico svg{width:27px;height:27px}
+.nuc-name{font-family:'Bricolage Grotesque',serif;font-weight:700;font-size:1.22rem;margin-bottom:5px}
+.nuc-desc{font-size:.86rem;color:var(--muted);line-height:1.5}
+.nuc-go{margin-top:16px;font-size:.82rem;font-weight:600;color:var(--nc);display:inline-flex;align-items:center;gap:7px}
+.nuc-go svg{transition:transform .25s var(--ease)}.nuc-card:hover .nuc-go svg{transform:translateX(4px)}
+.hero-strip{border-top:1px solid var(--line);padding:24px 0 6px;display:flex;justify-content:center;flex-wrap:wrap;gap:40px;margin-top:30px}
+.stat{display:flex;flex-direction:column;align-items:center}
+.stat b{font-family:'Bricolage Grotesque',serif;font-size:1.5rem;color:var(--accent)}
+.stat span{font-size:.78rem;color:var(--muted)}
+
+/* form */
+.formwrap{max-width:760px;margin:0 auto;padding:32px 0 90px}
+.nuc-badge{display:inline-flex;align-items:center;gap:9px;background:var(--accent-tint);border:1px solid var(--accent-soft);color:var(--accent);border-radius:999px;padding:7px 15px 7px 11px;font-size:.82rem;font-weight:600;margin-bottom:18px;transition:all .4s var(--ease)}
+.nuc-badge .ic{display:grid;place-items:center;color:var(--accent)}
+.nuc-badge .ic svg{width:15px;height:15px}
+.nuc-badge button{background:none;border:none;color:var(--muted);cursor:pointer;font-family:inherit;font-size:.76rem;text-decoration:underline;text-underline-offset:2px;margin-left:4px}
+.progress-head{margin-bottom:8px}
+.progress-steps{display:flex;gap:6px;margin-bottom:11px}
+.pstep{flex:1;height:6px;border-radius:999px;background:var(--line);overflow:hidden;position:relative}
+.pstep i{position:absolute;inset:0;width:0;background:linear-gradient(90deg,var(--accent),var(--gold));transition:width .55s var(--ease)}
+.pstep.done i,.pstep.current i{width:100%}
+.progress-label{display:flex;justify-content:space-between;font-size:.78rem;color:var(--muted)}
+.progress-label b{color:var(--accent);font-weight:600}
+.vibe{font-size:.82rem;color:var(--accent);font-weight:600;margin:10px 0 22px;display:flex;align-items:center;gap:8px;min-height:20px;transition:opacity .3s}
+.vibe svg{flex:none}
+
+.step{display:none}.step.active{display:block}
+.step-head{margin-bottom:24px}.step-head .eyebrow{margin-bottom:13px}
+.step-head h2{font-family:'Bricolage Grotesque',serif;font-weight:700;font-size:clamp(1.6rem,4vw,2.2rem);line-height:1.08}
+.step-head p{color:var(--muted);margin-top:8px;font-size:.98rem}
+.card{background:var(--paper);border:1px solid var(--line-soft);border-radius:var(--r-md);padding:30px;box-shadow:var(--shadow-sm)}
+.field{margin-bottom:22px}.field:last-child{margin-bottom:0}
+.step.active .field{animation:fieldReveal .5s var(--ease) both}
+@keyframes fieldReveal{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.field label{display:block;font-size:.86rem;font-weight:600;color:var(--ink);margin-bottom:9px}
+.field label .req{color:var(--accent)}
+.field .hint{font-size:.76rem;color:var(--muted);font-weight:400;margin-top:-3px;margin-bottom:9px}
+.field .hint .cnt{color:var(--accent);font-weight:600}
+.field label .opt-tag{font-size:.72rem;font-weight:400;color:var(--muted)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.row3{display:grid;grid-template-columns:1.6fr .6fr;gap:18px}
+input[type=text],input[type=email],input[type=tel],input[type=number],input[type=url],select,textarea{width:100%;font-family:inherit;font-size:.98rem;color:var(--ink);background:var(--bg);border:1.5px solid var(--line);border-radius:var(--r-sm);padding:13px 15px;transition:border-color .2s,box-shadow .2s,background .2s}
+textarea{resize:vertical;min-height:104px}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent);background:var(--paper);box-shadow:0 0 0 4px var(--accent-soft)}
+select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' fill='none' stroke='%23737888' stroke-width='2'%3E%3Cpath d='M3 5l4 4 4-4'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 15px center;padding-right:38px}
+.invalid input,.invalid select,.invalid textarea{border-color:var(--danger);background:#fdf3f2}
+.err-msg{display:none;color:var(--danger);font-size:.78rem;margin-top:6px}.invalid .err-msg{display:block}
+.optgroup{display:flex;flex-wrap:wrap;gap:10px}
+.opt{font-family:inherit;font-size:.88rem;font-weight:500;cursor:pointer;background:var(--bg);border:1.5px solid var(--line);border-radius:999px;padding:9px 17px;color:var(--ink);transition:all .2s var(--ease);user-select:none}
+.opt:hover{border-color:var(--accent);transform:translateY(-1px)}
+.opt.selected{background:var(--accent);border-color:var(--accent);color:#fff;box-shadow:0 6px 16px var(--accent-soft);animation:pillPop .3s var(--ease)}
+@keyframes pillPop{0%{transform:scale(1)}45%{transform:scale(1.07)}100%{transform:scale(1)}}
+.consent{display:flex;gap:13px;align-items:flex-start;background:var(--bg-2);border:1px solid var(--line-soft);border-radius:var(--r-sm);padding:16px 18px;margin-top:6px}
+.consent input{width:20px;height:20px;flex:none;margin-top:2px;accent-color:var(--accent)}
+.consent label{font-size:.83rem;color:var(--muted);font-weight:400;line-height:1.5}
+.consent.invalid{border-color:var(--danger);background:#fdf3f2}
+.nav-row{display:flex;justify-content:space-between;align-items:center;margin-top:26px;gap:14px}.nav-row .spacer{flex:1}
+
+/* confirmação + confete */
+.confirm{max-width:600px;margin:0 auto;text-align:center;padding:74px 0;position:relative}
+.confirm .badge{width:96px;height:96px;border-radius:50%;margin:0 auto 26px;background:linear-gradient(135deg,var(--success),#205a40);display:grid;place-items:center;box-shadow:0 16px 40px rgba(47,125,91,.35);animation:pop .55s var(--ease)}
+@keyframes pop{0%{transform:scale(.4);opacity:0}55%{transform:scale(1.12)}100%{transform:scale(1);opacity:1}}
+.confirm .badge svg{stroke-dasharray:30;stroke-dashoffset:30;animation:draw .5s .25s var(--ease) forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+.confirm h2{font-family:'Bricolage Grotesque',serif;font-weight:700;font-size:2.1rem;margin-bottom:12px}
+.confirm p{color:var(--muted);margin-bottom:8px}
+.protocol{display:inline-block;margin:18px 0 26px;background:var(--bg-2);border:1px dashed var(--gold);border-radius:var(--r-sm);padding:12px 22px;font-family:'Bricolage Grotesque',serif;letter-spacing:.04em;color:var(--accent)}
+.confirm-cta{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+.confetti{position:absolute;inset:0;pointer-events:none;overflow:visible}
+.confetti i{position:absolute;top:70px;left:50%;width:9px;height:9px;border-radius:2px;opacity:0}
+.confetti.go i{animation:burst .9s var(--ease) forwards}
+@keyframes burst{0%{opacity:1;transform:translate(0,0) rotate(0)}100%{opacity:0;transform:translate(var(--dx),var(--dy)) rotate(var(--rot))}}
+
+/* footer */
+.foot{border-top:1px solid var(--line);padding:38px 0;margin-top:20px}
+.foot-inner{max-width:var(--maxw);margin:0 auto;padding:0 24px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:24px;align-items:center}
+.foot .c{font-size:.82rem;color:var(--muted);line-height:1.7}
+.foot a{color:var(--accent);text-decoration:none}.foot a:hover{text-decoration:underline}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(120px);background:var(--ink);color:#fff;padding:14px 24px;border-radius:999px;font-size:.88rem;box-shadow:var(--shadow-lg);z-index:99;transition:transform .4s var(--ease);max-width:90vw}
+.toast.show{transform:translateX(-50%) translateY(0)}
+
+@media(max-width:880px){.nuc-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){
+  .wrap,.topbar-inner,.foot-inner{padding-left:18px;padding-right:18px}
+  .row2,.row3{grid-template-columns:1fr}.card{padding:22px 18px}.nuc-grid{grid-template-columns:1fr}
+  .brand .sub{display:none}.btn{padding:13px 22px;font-size:.9rem}.progress-label .stepname{display:none}
+}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" onclick="goHome()">
+      <div class="mark">A</div>
+      <div><div class="name">ACES Sinop</div><div class="sub">Cadastro de Empresas</div></div>
+    </a>
+    <a class="toplink" href="https://aces.org.br" target="_blank" rel="noopener">aces.org.br</a>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="screen active" id="screen-hero">
+  <div class="wrap hero">
+    <span class="eyebrow">Associação Comercial e Empresarial de Sinop&nbsp;—&nbsp;MT</span>
+    <h1 class="display">Cadastro de empresas por <em>núcleo</em></h1>
+    <p class="lead">Leva poucos minutos. Comece escolhendo o núcleo da sua empresa — as perguntas seguintes se adaptam a ele.</p>
+    <div class="pick">Qual o núcleo da sua empresa?</div>
+    <div class="nuc-grid" id="nucGrid"></div>
+    <div class="hero-strip">
+      <div class="stat"><b>6</b><span>núcleos empresariais</span></div>
+      <div class="stat"><b>~4 min</b><span>para preencher</span></div>
+      <div class="stat"><b>Sinop</b><span>e região · MT</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- FORM -->
+<section class="screen" id="screen-form">
+  <div class="wrap formwrap">
+    <div class="nuc-badge" id="nucBadge"><span class="ic" id="nucBadgeIcon"></span><span id="nucBadgeName">Núcleo</span><button onclick="goHome()">trocar</button></div>
+    <div class="progress-head">
+      <div class="progress-steps">
+        <div class="pstep" data-s="1"><i></i></div><div class="pstep" data-s="2"><i></i></div><div class="pstep" data-s="3"><i></i></div>
+        <div class="pstep" data-s="4"><i></i></div><div class="pstep" data-s="5"><i></i></div><div class="pstep" data-s="6"><i></i></div>
+      </div>
+      <div class="progress-label"><span>Etapa <b id="stepNum">1</b> de 6 <span class="stepname">· <span id="stepName">A empresa</span></span></span><span id="stepPct">17%</span></div>
+    </div>
+    <div class="vibe" id="vibe"></div>
+
+    <div class="stepwrap" id="stepwrap">
+      <!-- ETAPA 1 -->
+      <div class="step active" data-step="1">
+        <div class="step-head"><span class="eyebrow">Identificação</span><h2>A empresa</h2><p>Dados gerais do negócio que você representa.</p></div>
+        <div class="card">
+          <div class="field" data-required="empresa_nome"><label>Razão social / Nome da empresa <span class="req">*</span></label><input type="text" id="empresa_nome" placeholder="Nome registrado da empresa"><div class="err-msg">Informe o nome da empresa.</div></div>
+          <div class="row2">
+            <div class="field"><label>Nome fantasia</label><input type="text" id="empresa_fantasia" placeholder="Como é conhecida"></div>
+            <div class="field"><label>CNPJ <span class="opt-tag">(em branco se MEI/sem CNPJ)</span></label><input type="text" id="empresa_cnpj" placeholder="00.000.000/0000-00" inputmode="numeric"></div>
+          </div>
+          <div class="row2">
+            <div class="field" data-required="empresa_setor"><label>Setor de atuação <span class="req">*</span></label>
+              <select id="empresa_setor"><option value="">Selecione…</option><option>Comércio</option><option>Indústria</option><option>Serviços</option><option>Agronegócio</option><option>Tecnologia</option><option>Saúde</option><option>Educação</option><option>Construção</option><option>Alimentação</option><option>Imobiliário</option><option>Turismo / Hotelaria</option><option>Beleza e Estética</option><option>Financeiro</option><option>Logística / Transporte</option><option>Outro</option></select>
+              <div class="err-msg">Selecione o setor.</div></div>
+            <div class="field" data-required="num_funcionarios" data-type="num"><label>Número de funcionários <span class="req">*</span></label><input type="number" id="num_funcionarios" min="0" placeholder="Ex.: 12"><div class="err-msg">Informe um número válido.</div></div>
+          </div>
+          <div class="row2">
+            <div class="field"><label>Porte da empresa</label><select id="empresa_porte"><option value="">Selecione…</option><option>MEI</option><option>Microempresa</option><option>Pequena empresa</option><option>Média empresa</option><option>Grande empresa</option></select></div>
+            <div class="field"><label>Tempo de atuação no mercado</label><select id="empresa_tempo"><option value="">Selecione…</option><option>Menos de 1 ano</option><option>1 a 3 anos</option><option>4 a 10 anos</option><option>11 a 20 anos</option><option>Mais de 20 anos</option></select></div>
+          </div>
+        </div>
+        <div class="nav-row"><button class="btn btn-ghost" onclick="goHome()">Cancelar</button><div class="spacer"></div><button class="btn btn-primary btn-arrow" onclick="nextStep()">Continuar <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></div>
+      </div>
+
+      <!-- ETAPA 2 -->
+      <div class="step" data-step="2">
+        <div class="step-head"><span class="eyebrow">Perfil</span><h2>Perfil da empresa</h2><p>Composição da equipe e presença da marca.</p></div>
+        <div class="card">
+          <div class="field" data-required="maioria_genero" data-opt="true"><label>A equipe da empresa é majoritariamente composta por <span class="req">*</span></label>
+            <div class="optgroup" data-name="maioria_genero"><div class="opt" data-value="Mulheres">Mulheres</div><div class="opt" data-value="Homens">Homens</div><div class="opt" data-value="Equilibrado">Equilibrado</div></div>
+            <div class="err-msg">Selecione uma opção.</div></div>
+          <div class="row2">
+            <div class="field"><label>Website</label><input type="url" id="perfil_site" placeholder="https://..."></div>
+            <div class="field"><label>Instagram</label><input type="text" id="perfil_instagram" placeholder="@suaempresa"></div>
+          </div>
+          <div class="field"><label>Breve descrição — o que a empresa faz</label><div class="hint">Em uma ou duas frases, o "estilo" e o foco do negócio.</div><textarea id="perfil_descricao" placeholder="Ex.: Loja de roupas femininas com foco em moda autoral…"></textarea></div>
+        </div>
+        <div class="nav-row"><button class="btn btn-ghost" onclick="prevStep()">Voltar</button><div class="spacer"></div><button class="btn btn-primary btn-arrow" onclick="nextStep()">Continuar <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></div>
+      </div>
+
+      <!-- ETAPA 3 -->
+      <div class="step" data-step="3">
+        <div class="step-head"><span class="eyebrow">Localização</span><h2>Endereço</h2><p>Onde a empresa está localizada. O CEP preenche o resto.</p></div>
+        <div class="card">
+          <div class="row2">
+            <div class="field"><label>CEP</label><input type="text" id="end_cep" placeholder="78556-100" inputmode="numeric"><div class="hint" id="cepStatus" style="margin-top:6px;margin-bottom:0;display:none"></div></div>
+            <div class="field"><label>Bairro</label><input type="text" id="end_bairro" placeholder="Ex.: Setor Comercial"></div>
+          </div>
+          <div class="row3">
+            <div class="field"><label>Logradouro (rua / avenida)</label><input type="text" id="end_rua" placeholder="Ex.: Av. das Itaúbas"></div>
+            <div class="field"><label>Número</label><input type="text" id="end_numero" placeholder="2331"></div>
+          </div>
+          <div class="field"><label>Complemento</label><input type="text" id="end_complemento" placeholder="Sala, bloco, ponto de referência…"></div>
+          <div class="row2">
+            <div class="field"><label>Cidade</label><input type="text" id="end_cidade" placeholder="Sinop" value="Sinop"></div>
+            <div class="field"><label>Estado (UF)</label><input type="text" id="end_uf" placeholder="MT" value="MT" maxlength="2" style="text-transform:uppercase"></div>
+          </div>
+        </div>
+        <div class="nav-row"><button class="btn btn-ghost" onclick="prevStep()">Voltar</button><div class="spacer"></div><button class="btn btn-primary btn-arrow" onclick="nextStep()">Continuar <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></div>
+      </div>
+
+      <!-- ETAPA 4 -->
+      <div class="step" data-step="4">
+        <div class="step-head"><span class="eyebrow">Contato</span><h2>Responsável pelo cadastro</h2><p>Dados de quem está preenchendo — usados pela ACES para retorno.</p></div>
+        <div class="card">
+          <div class="row2">
+            <div class="field" data-required="resp_nome"><label>Nome completo <span class="req">*</span></label><input type="text" id="resp_nome" placeholder="Seu nome"><div class="err-msg">Informe seu nome.</div></div>
+            <div class="field" data-required="resp_cpf" data-type="cpf"><label>CPF <span class="req">*</span></label><input type="text" id="resp_cpf" placeholder="000.000.000-00" inputmode="numeric"><div class="err-msg">Informe um CPF válido.</div></div>
+          </div>
+          <div class="row2">
+            <div class="field" data-required="resp_email" data-type="email"><label>E-mail <span class="req">*</span></label><input type="email" id="resp_email" placeholder="nome@empresa.com.br"><div class="err-msg">Informe um e-mail válido.</div></div>
+            <div class="field" data-required="resp_whatsapp" data-type="phone"><label>WhatsApp <span class="req">*</span></label><input type="tel" id="resp_whatsapp" placeholder="(66) 99999-9999" inputmode="numeric"><div class="err-msg">Informe um WhatsApp válido.</div></div>
+          </div>
+          <div class="row2">
+            <div class="field"><label>Cargo / função</label><input type="text" id="resp_cargo" placeholder="Ex.: Sócia, Gerente, Proprietário…"></div>
+            <div class="field" data-opt="true"><label>Gênero</label><div class="optgroup" data-name="resp_genero"><div class="opt" data-value="Mulher">Mulher</div><div class="opt" data-value="Homem">Homem</div><div class="opt" data-value="Outro">Outro</div><div class="opt" data-value="Prefiro não informar">Não informar</div></div></div>
+          </div>
+        </div>
+        <div class="nav-row"><button class="btn btn-ghost" onclick="prevStep()">Voltar</button><div class="spacer"></div><button class="btn btn-primary btn-arrow" onclick="nextStep()">Continuar <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></div>
+      </div>
+
+      <!-- ETAPA 5 (dinâmica) -->
+      <div class="step" data-step="5">
+        <div class="step-head"><span class="eyebrow" id="nucEyebrow">Núcleo</span><h2 id="nucStepTitle">Sobre seu núcleo</h2><p id="nucStepDesc">Perguntas específicas para este núcleo.</p></div>
+        <div class="card" id="nucFieldsCard"></div>
+        <div class="nav-row"><button class="btn btn-ghost" onclick="prevStep()">Voltar</button><div class="spacer"></div><button class="btn btn-primary btn-arrow" onclick="nextStep()">Continuar <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></div>
+      </div>
+
+      <!-- ETAPA 6 -->
+      <div class="step" data-step="6">
+        <div class="step-head"><span class="eyebrow">Relacionamento</span><h2>ACES & finalização</h2><p>Sua relação com a associação e a autorização de dados.</p></div>
+        <div class="card">
+          <div class="field" data-opt="true"><label>Sua empresa já é associada à ACES?</label><div class="optgroup" data-name="aces_associada" data-onpick="toggleInteresse"><div class="opt" data-value="Sim">Sim, já somos</div><div class="opt" data-value="Não">Ainda não</div><div class="opt" data-value="Não sei">Não sei informar</div></div></div>
+          <div class="field" id="interesseField" data-opt="true"><label>Tem interesse em se associar / participar do núcleo?</label><div class="optgroup" data-name="aces_interesse"><div class="opt" data-value="Sim, tenho interesse">Sim, tenho interesse</div><div class="opt" data-value="Talvez">Talvez, quero saber mais</div><div class="opt" data-value="Não no momento">Não no momento</div></div></div>
+          <div class="field" data-opt="true"><label>Como conheceu a ACES?</label><div class="optgroup" data-name="aces_origem"><div class="opt" data-value="Indicação">Indicação</div><div class="opt" data-value="Redes sociais">Redes sociais</div><div class="opt" data-value="Evento">Evento</div><div class="opt" data-value="Site">Site</div><div class="opt" data-value="Já era associada">Já era associada</div><div class="opt" data-value="Outro">Outro</div></div></div>
+          <div class="field"><label>Sugestões, observações ou demandas</label><div class="hint">O que sua empresa espera do núcleo e da ACES (opcional).</div><textarea id="obs" placeholder="Escreva aqui…"></textarea></div>
+          <div class="consent" id="consentBox"><input type="checkbox" id="lgpd"><label for="lgpd">Autorizo a ACES — Associação Comercial e Empresarial de Sinop a armazenar e utilizar as informações para fins de cadastro, levantamento estatístico, organização dos núcleos e eventual contato, conforme a <a href="https://aces.org.br/politica-de-privacidade/" target="_blank" rel="noopener">Política de Privacidade</a> e a LGPD (Lei nº 13.709/2018).</label></div>
+          <div class="err-msg" id="lgpdErr" style="margin-left:2px">É necessário autorizar o uso dos dados para enviar.</div>
+        </div>
+        <div class="nav-row"><button class="btn btn-ghost" onclick="prevStep()">Voltar</button><div class="spacer"></div><button class="btn btn-dark" id="submitBtn" onclick="submitForm()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 13l4 4L19 7"/></svg> Enviar cadastro</button></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONFIRMAÇÃO -->
+<section class="screen" id="screen-done">
+  <div class="wrap"><div class="confirm">
+    <div class="confetti" id="confetti"></div>
+    <div class="badge"><svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6"><path d="M5 13l4 4L19 7"/></svg></div>
+    <h2 class="display">Cadastro enviado!</h2>
+    <p>Obrigado por contribuir com o mapeamento da ACES.<br>Sua empresa foi registrada no núcleo <strong id="doneNucleo">—</strong>.</p>
+    <div class="protocol" id="protocolBox">Protocolo —</div>
+    <div class="confirm-cta">
+      <button class="btn btn-primary" onclick="resetForm()">Cadastrar outra empresa</button>
+      <a class="btn btn-ghost" href="https://aces.org.br" target="_blank" rel="noopener">Voltar ao site</a>
+    </div>
+  </div></div>
+</section>
+
+<!-- FOOTER -->
+<footer class="foot">
+  <div class="foot-inner">
+    <div class="c"><strong style="font-family:'Bricolage Grotesque',serif;color:var(--accent)">ACES — Associação Comercial e Empresarial de Sinop</strong><br>Av. das Itaúbas, 2331 · Setor Comercial · Sinop/MT · CEP 78556-100<br><a href="tel:+556635315807">(66) 3531-5807</a> · <a href="mailto:aces@aces.org.br">aces@aces.org.br</a></div>
+    <div class="c" style="text-align:right"><span style="font-size:.74rem">Cadastro de empresas por núcleo<br><span id="footYear"></span> · ACES Sinop</span></div>
+  </div>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ===================== CONFIG ===================== */
+/* >>> COLE AQUI a URL do Web App do Google Apps Script (passo 4 das instruções)
+   para enviar cada cadastro à sua planilha do Google Sheets.
+   Enquanto estiver "" o formulário funciona normalmente, só não envia à planilha. <<< */
+const SHEETS_ENDPOINT="https://script.google.com/macros/s/AKfycbyIL8UW_giChDUo12s-uarzcJJO2LjikoqlashaTxvaOWcDhsbiPoKeeAeE3mDckQA2pA/exec";
+
+/* Os cadastros também são salvos com esta chave (backup / integração futura com o dashboard). */
+const STORE_PREFIX="aces_nucleos_resp:";
+const SHARED=true;
+const memoryStore={};
+const DEFAULT_ACCENT="#1F4E5F";
+
+/* ===================== NÚCLEOS ===================== */
+const ICONS={
+  imob:'<path d="M3 21h18M5 21V8l7-4 7 4v13M9 21v-5h6v5M9 11h.01M15 11h.01"/>',
+  tur:'<circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2 5-5 2 2-5 5-2z"/>',
+  fit:'<path d="M6.5 6.5l11 11M4 9l-1.5 1.5 2 2M20 15l1.5-1.5-2-2M7 4l2 2M17 20l-2-2M9 8l7 7"/>',
+  mul:'<circle cx="12" cy="8" r="5"/><path d="M12 13v8M9 18h6"/>',
+  jov:'<path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/>',
+  dh:'<circle cx="9" cy="8" r="3"/><circle cx="17" cy="9" r="2.4"/><path d="M3 20c0-3 2.5-5 6-5s6 2 6 5M15.5 20c0-2 1.2-3.5 3-3.5"/>'
+};
+const NUCLEOS={
+  'Imobiliário':{key:'imob',color:'#2D5A8C',desc:'Corretoras, incorporadoras e administradoras de imóveis.',fields:[
+    {key:'imob_atuacao',label:'Tipo de atuação',type:'multi',options:['Corretagem / Intermediação','Incorporação','Administração / Locação','Loteamento','Construção','Avaliação de imóveis']},
+    {key:'imob_segmento',label:'Segmento principal',type:'single',options:['Residencial','Comercial','Rural','Alto padrão','Misto']},
+    {key:'imob_modalidade',label:'Trabalha com',type:'single',options:['Venda','Locação','Ambos']},
+    {key:'imob_creci',label:'Nº CRECI (empresa ou responsável)',type:'text',ph:'Ex.: CRECI-MT 0000'},
+    {key:'imob_carteira',label:'Imóveis ativos em carteira',type:'select',options:['Até 20','21 a 100','101 a 500','Mais de 500']}]},
+  'Turismo':{key:'tur',color:'#1E7A7A',desc:'Hotelaria, agências, eventos e turismo de experiência.',fields:[
+    {key:'tur_segmento',label:'Segmento principal',type:'single',options:['Hospedagem / Hotelaria','Agência de viagens','Transporte turístico','Eventos / Receptivo','Gastronomia','Ecoturismo / Aventura','Outro']},
+    {key:'tur_publico',label:'Público atendido',type:'multi',options:['Receptivo (quem vem a Sinop)','Emissivo','Corporativo','Lazer / Família']},
+    {key:'tur_cadastur',label:'Possui Cadastur ativo?',type:'single',options:['Sim','Não','Em processo']},
+    {key:'tur_capacidade',label:'Capacidade de atendimento',type:'text',ph:'Ex.: 80 leitos / 120 lugares / 200 pax'},
+    {key:'tur_sazonal',label:'Sofre forte sazonalidade?',type:'single',options:['Sim','Em parte','Não']}]},
+  'Fit':{key:'fit',color:'#2E8B57',desc:'Academias, estúdios, nutrição e bem-estar.',fields:[
+    {key:'fit_segmento',label:'Segmento principal',type:'single',options:['Academia / Musculação','Estúdio (pilates, funcional)','Crossfit','Artes marciais','Personal trainer','Nutrição','Suplementação','Outro']},
+    {key:'fit_modalidades',label:'Modalidades oferecidas',type:'multi',options:['Musculação','Funcional','Lutas','Dança','Pilates','Aulas coletivas','Avaliação física']},
+    {key:'fit_alunos',label:'Alunos / clientes ativos',type:'select',options:['Até 50','51 a 200','201 a 500','Mais de 500']},
+    {key:'fit_cref',label:'Equipe possui CREF?',type:'single',options:['Sim','Parcialmente','Não']},
+    {key:'fit_planos',label:'Trabalha com planos recorrentes (mensalidade)?',type:'single',options:['Sim','Não']}]},
+  'Mulher':{key:'mul',color:'#A33B53',desc:'Liderança, empreendedorismo e protagonismo feminino.',fields:[
+    {key:'mul_lideranca',label:'A empresa foi fundada ou é liderada por uma mulher?',type:'single',options:['Sim','Sociedade mista','Não']},
+    {key:'mul_mulheres_gestao',label:'Quantas mulheres ocupam cargos de gestão?',type:'number',ph:'Ex.: 3'},
+    {key:'mul_temas',label:'Temas de maior interesse',type:'multi',options:['Liderança feminina','Empreendedorismo','Gestão financeira','Networking','Saúde e bem-estar','Sucessão familiar']},
+    {key:'mul_pilar',label:'Pilar do ACES Mulher que mais atrai',type:'multi',options:['Troca de Experiências','Promoção do Conselho','Relacionamento e Negócios','Desenvolvimento de Lideranças']}]},
+  'Jovem':{key:'jov',color:'#C5631A',desc:'Jovens empreendedores e negócios inovadores.',fields:[
+    {key:'jov_idade_gestor',label:'Idade do principal gestor / empreendedor',type:'select',options:['Até 24 anos','25 a 30 anos','31 a 35 anos','Acima de 35 anos']},
+    {key:'jov_faixa_equipe',label:'Faixa etária predominante da equipe',type:'single',options:['Até 25 anos','26 a 35 anos','36+ anos','Variada']},
+    {key:'jov_inovacao',label:'É um negócio inovador / startup?',type:'single',options:['Sim','Parcialmente','Não']},
+    {key:'jov_tempo',label:'Tempo de mercado',type:'select',options:['Menos de 1 ano','1 a 3 anos','4 a 6 anos','Mais de 6 anos']},
+    {key:'jov_interesse',label:'Interesse em',type:'multi',options:['Mentoria','Capacitação','Networking jovem','Aceleração / Investimento','Eventos']}]},
+  'Desenvolvimento Humano':{key:'dh',color:'#6A4C9C',desc:'RH, treinamento, cultura e desenvolvimento de pessoas.',fields:[
+    {key:'dh_area',label:'Área principal de atuação',type:'single',options:['RH / Recrutamento','Treinamento & Desenvolvimento','Coaching / Mentoria','Consultoria organizacional','Psicologia organizacional','Educação corporativa','Outro']},
+    {key:'dh_foco',label:'Foco de atuação',type:'multi',options:['Capacitação técnica','Liderança','Cultura organizacional','Saúde mental','Recrutamento & seleção','Avaliação de desempenho']},
+    {key:'dh_modalidade',label:'Modalidade de entrega',type:'single',options:['Presencial','Online','Híbrido']},
+    {key:'dh_alcance',label:'Empresas / pessoas atendidas por ano',type:'select',options:['Até 10','11 a 50','51 a 200','Mais de 200']}]}
+};
+
+/* ===================== ENVIO PARA PLANILHA (Google Sheets) ===================== */
+/* Ordem e rótulos das colunas comuns na planilha */
+const COMMON_COLS=[['protocolo','Protocolo'],['criadoEm','Data/Hora'],['nucleo','Núcleo'],['empresa_nome','Razão social'],['empresa_fantasia','Nome fantasia'],['empresa_cnpj','CNPJ'],['empresa_setor','Setor'],['num_funcionarios','Nº funcionários'],['empresa_porte','Porte'],['empresa_tempo','Tempo de atuação'],['maioria_genero','Maioria da equipe'],['perfil_site','Website'],['perfil_instagram','Instagram'],['perfil_descricao','Descrição'],['end_cep','CEP'],['end_rua','Logradouro'],['end_numero','Número'],['end_complemento','Complemento'],['end_bairro','Bairro'],['end_cidade','Cidade'],['end_uf','UF'],['resp_nome','Responsável'],['resp_cpf','CPF'],['resp_cargo','Cargo'],['resp_email','E-mail'],['resp_whatsapp','WhatsApp'],['resp_genero','Gênero'],['aces_associada','Associada ACES'],['aces_interesse','Interesse em associar'],['aces_origem','Como conheceu'],['obs','Observações'],['lgpd','Consentimento LGPD']];
+/* Rótulos das perguntas específicas (prefixados pelo núcleo p/ não misturar colunas) */
+const ESP_LABELS={};Object.entries(NUCLEOS).forEach(([nome,n])=>(n.fields||[]).forEach(f=>ESP_LABELS[f.key]='['+nome+'] '+f.label));
+function fmtv(v){if(Array.isArray(v))return v.join(' | ');if(typeof v==='boolean')return v?'Sim':'Não';return v==null?'':String(v);}
+function flattenForSheet(rec){const flat={};COMMON_COLS.forEach(([k,l])=>{flat[l]=k==='criadoEm'?new Date(rec[k]).toLocaleString('pt-BR'):fmtv(rec[k]);});Object.entries(rec.especificas||{}).forEach(([k,v])=>{flat[ESP_LABELS[k]||k]=fmtv(v);});return flat;}
+async function sendToSheet(rec){
+  if(!SHEETS_ENDPOINT)return{sent:false,skipped:true};
+  try{
+    await fetch(SHEETS_ENDPOINT,{
+      method:'POST',
+      mode:'no-cors',                                  // contorna o CORS do Apps Script
+      headers:{'Content-Type':'text/plain;charset=utf-8'},
+      body:JSON.stringify(flattenForSheet(rec))
+    });
+    return{sent:true}; // resposta "opaca" no modo no-cors: não dá p/ ler, então assumimos enviado
+  }catch(err){console.error('Falha ao enviar à planilha:',err);return{sent:false,error:err};}
+}
+
+/* ===================== ESTADO ===================== */
+let currentNucleo=null,renderedNucleo=null,currentStep=1;
+const STEP_NAMES={1:'A empresa',2:'Perfil',3:'Endereço',4:'Responsável',5:'Núcleo',6:'Finalização'};
+const STEP_VIBES={1:'Vamos começar com o básico.',2:'Conte um pouco sobre o perfil.',3:'Quase na metade do caminho.',4:'Seus dados de contato.',5:'Perguntas sob medida para o seu núcleo.',6:'Reta final — falta pouco!'};
+
+/* ===================== ACCENT ===================== */
+function hexToRgba(hex,a){const h=hex.replace('#','');return `rgba(${parseInt(h.slice(0,2),16)},${parseInt(h.slice(2,4),16)},${parseInt(h.slice(4,6),16)},${a})`;}
+function setAccent(hex){const r=document.documentElement.style;r.setProperty('--accent',hex);r.setProperty('--accent-soft',hexToRgba(hex,.13));r.setProperty('--accent-tint',hexToRgba(hex,.08));}
+
+/* ===================== GRID NÚCLEOS ===================== */
+function renderNucGrid(){
+  document.getElementById('nucGrid').innerHTML=Object.entries(NUCLEOS).map(([nome,n],i)=>`
+    <div class="nuc-card" style="--nc:${n.color};--nc-tint:${hexToRgba(n.color,.12)};animation-delay:${i*70}ms" onclick="selectNucleo('${nome.replace(/'/g,"\\'")}')">
+      <div class="nuc-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${ICONS[n.key]}</svg></div>
+      <div class="nuc-name">${nome}</div><div class="nuc-desc">${n.desc}</div>
+      <div class="nuc-go">Cadastrar nesse núcleo <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+    </div>`).join('');
+}
+function selectNucleo(nome){
+  currentNucleo=nome;const n=NUCLEOS[nome];setAccent(n.color);
+  document.getElementById('nucBadgeName').textContent='Núcleo '+nome;
+  document.getElementById('nucBadgeIcon').innerHTML=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">${ICONS[n.key]}</svg>`;
+  document.getElementById('nucEyebrow').textContent='Núcleo '+nome;
+  document.getElementById('nucStepTitle').textContent='Sobre · '+nome;
+  document.getElementById('nucStepDesc').textContent='Perguntas específicas do núcleo '+nome+'.';
+  STEP_NAMES[5]=nome;
+  if(renderedNucleo!==nome){renderNucleoFields(nome);renderedNucleo=nome;}
+  showScreen('screen-form');goToStep(1,1);
+}
+
+/* ===================== CAMPOS DINÂMICOS ===================== */
+function fieldHTML(f){
+  const lbl=`<label>${f.label}${f.req?' <span class="req">*</span>':''}</label>`+(f.hint?`<div class="hint">${f.hint}</div>`:'');
+  if(f.type==='text'||f.type==='number')return `<div class="field">${lbl}<input type="${f.type==='number'?'number':'text'}" id="${f.key}" placeholder="${f.ph||''}" ${f.type==='number'?'min="0"':''}></div>`;
+  if(f.type==='textarea')return `<div class="field">${lbl}<textarea id="${f.key}" placeholder="${f.ph||''}"></textarea></div>`;
+  if(f.type==='select')return `<div class="field">${lbl}<select id="${f.key}"><option value="">Selecione…</option>${f.options.map(o=>`<option>${o}</option>`).join('')}</select></div>`;
+  const multi=f.type==='multi';
+  return `<div class="field">${lbl}${multi?`<div class="hint" style="margin-top:-2px">Selecione quantos quiser. <span class="cnt" data-cnt="${f.key}"></span></div>`:''}<div class="optgroup" data-name="${f.key}" ${multi?'data-multi="true"':''}>${f.options.map(o=>`<div class="opt" data-value="${o.replace(/"/g,'&quot;')}">${o}</div>`).join('')}</div></div>`;
+}
+function renderNucleoFields(nome){document.getElementById('nucFieldsCard').innerHTML=(NUCLEOS[nome].fields||[]).map(fieldHTML).join('');wireOptGroups();}
+
+/* ===================== PÍLULAS ===================== */
+function wireOptGroups(){
+  document.querySelectorAll('.optgroup').forEach(g=>{
+    if(g.dataset.wired)return;g.dataset.wired="1";const multi=g.dataset.multi==="true";
+    g.querySelectorAll('.opt').forEach(o=>o.addEventListener('click',()=>{
+      if(multi)o.classList.toggle('selected');else{g.querySelectorAll('.opt').forEach(x=>x.classList.remove('selected'));o.classList.add('selected');}
+      const f=g.closest('.field');if(f)f.classList.remove('invalid');
+      if(multi){const cnt=document.querySelector(`.cnt[data-cnt="${g.dataset.name}"]`);if(cnt){const n=g.querySelectorAll('.opt.selected').length;cnt.textContent=n?`${n} selecionado${n>1?'s':''}`:'';}}
+      if(g.dataset.onpick==='toggleInteresse')toggleInteresse();
+    }));
+  });
+}
+function getOpt(name){const g=document.querySelector(`.optgroup[data-name="${name}"]`);if(!g)return"";const s=[...g.querySelectorAll('.opt.selected')].map(o=>o.dataset.value);return g.dataset.multi==="true"?s:(s[0]||"");}
+function toggleInteresse(){document.getElementById('interesseField').style.display=getOpt('aces_associada')==='Sim'?'none':'block';}
+
+/* ===================== NAVEGAÇÃO + ANIMAÇÃO ===================== */
+function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));const el=document.getElementById(id);if(el)el.classList.add('active');window.scrollTo({top:0,behavior:'smooth'});}
+function goHome(){if(location.hash)history.replaceState(null,'',location.pathname);setAccent(DEFAULT_ACCENT);showScreen('screen-hero');}
+function goToStep(n,dir){
+  dir=dir||1;currentStep=n;
+  document.querySelectorAll('.step').forEach(s=>s.classList.remove('active'));
+  const stepEl=document.querySelector(`.step[data-step="${n}"]`);stepEl.classList.add('active');
+  // slide do passo
+  stepEl.style.animation='none';void stepEl.offsetWidth;
+  stepEl.style.animation=`fadeUp .45s var(--ease)`;
+  // cascata dos campos
+  stepEl.querySelectorAll('.field').forEach((f,i)=>{f.style.animation='none';void f.offsetWidth;f.style.animation='';f.style.animationDelay=(i*55)+'ms';});
+  // progresso
+  document.querySelectorAll('.pstep').forEach(p=>{const s=+p.dataset.s;p.classList.toggle('done',s<n);p.classList.toggle('current',s===n);});
+  document.getElementById('stepNum').textContent=n;
+  document.getElementById('stepName').textContent=STEP_NAMES[n];
+  document.getElementById('stepPct').textContent=Math.round(n/6*100)+'%';
+  const v=document.getElementById('vibe');v.style.opacity=0;
+  setTimeout(()=>{v.innerHTML=`<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 13l4 4L19 7"/></svg> ${STEP_VIBES[n]}`;v.style.opacity=1;},150);
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function nextStep(){if(validateStep(currentStep)&&currentStep<6)goToStep(currentStep+1,1);}
+function prevStep(){if(currentStep>1)goToStep(currentStep-1,-1);}
+
+/* ===================== VALIDAÇÃO ===================== */
+function isCPF(cpf){cpf=(cpf||'').replace(/\D/g,'');if(cpf.length!==11||/^(\d)\1{10}$/.test(cpf))return false;let s=0;for(let i=0;i<9;i++)s+=+cpf[i]*(10-i);let d1=(s*10)%11;if(d1===10)d1=0;if(d1!==+cpf[9])return false;s=0;for(let i=0;i<10;i++)s+=+cpf[i]*(11-i);let d2=(s*10)%11;if(d2===10)d2=0;return d2===+cpf[10];}
+function validateStep(n){
+  let ok=true;const step=document.querySelector(`.step[data-step="${n}"]`);
+  step.querySelectorAll('.field[data-required]').forEach(f=>{
+    if(f.dataset.opt==='true'){const name=f.querySelector('.optgroup').dataset.name;const v=getOpt(name);const valid=v!==''&&v.length!==0;f.classList.toggle('invalid',!valid);if(!valid)ok=false;return;}
+    const input=f.querySelector('input,select,textarea');const type=f.dataset.type;let valid=input.value.trim()!=='';
+    if(valid&&type==='email')valid=/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input.value.trim());
+    if(valid&&type==='num')valid=!isNaN(+input.value)&&+input.value>=0;
+    if(valid&&type==='cpf')valid=isCPF(input.value);
+    if(valid&&type==='phone')valid=input.value.replace(/\D/g,'').length>=10;
+    f.classList.toggle('invalid',!valid);if(!valid)ok=false;
+  });
+  if(!ok){toast('Confira os campos destacados.');const bad=step.querySelector('.invalid');if(bad)bad.scrollIntoView({behavior:'smooth',block:'center'});}
+  return ok;
+}
+function maskPhone(e){let v=e.target.value.replace(/\D/g,'').slice(0,11);if(v.length>6)v=`(${v.slice(0,2)}) ${v.slice(2,7)}-${v.slice(7)}`;else if(v.length>2)v=`(${v.slice(0,2)}) ${v.slice(2)}`;else if(v.length>0)v=`(${v}`;e.target.value=v;}
+function maskCpf(e){let v=e.target.value.replace(/\D/g,'').slice(0,11);v=v.replace(/(\d{3})(\d)/,'$1.$2').replace(/(\d{3})\.(\d{3})(\d)/,'$1.$2.$3').replace(/\.(\d{3})(\d)/,'.$1-$2');e.target.value=v;}
+function maskCnpj(e){let v=e.target.value.replace(/\D/g,'').slice(0,14);v=v.replace(/^(\d{2})(\d)/,'$1.$2').replace(/^(\d{2})\.(\d{3})(\d)/,'$1.$2.$3').replace(/\.(\d{3})(\d)/,'.$1/$2').replace(/(\d{4})(\d)/,'$1-$2');e.target.value=v;}
+function maskCep(e){let v=e.target.value.replace(/\D/g,'').slice(0,8);if(v.length>5)v=`${v.slice(0,5)}-${v.slice(5)}`;e.target.value=v;}
+document.getElementById('resp_whatsapp').addEventListener('input',maskPhone);
+document.getElementById('resp_cpf').addEventListener('input',maskCpf);
+document.getElementById('empresa_cnpj').addEventListener('input',maskCnpj);
+
+/* ---- Busca automática de endereço pelo CEP ---- */
+let lastCep='';
+async function fetchCepData(cep){
+  // 1) ViaCEP
+  try{const c=new AbortController();const t=setTimeout(()=>c.abort(),6000);const r=await fetch(`https://viacep.com.br/ws/${cep}/json/`,{signal:c.signal});clearTimeout(t);if(r.ok){const d=await r.json();if(d&&!d.erro)return{rua:d.logradouro||'',bairro:d.bairro||'',cidade:d.localidade||'',uf:d.uf||''};}}catch(_){}
+  // 2) BrasilAPI (reserva, caso o ViaCEP falhe)
+  try{const c=new AbortController();const t=setTimeout(()=>c.abort(),6000);const r=await fetch(`https://brasilapi.com.br/api/cep/v1/${cep}`,{signal:c.signal});clearTimeout(t);if(r.ok){const d=await r.json();if(d&&d.cep)return{rua:d.street||'',bairro:d.neighborhood||'',cidade:d.city||'',uf:d.state||''};}}catch(_){}
+  return null;
+}
+async function handleCep(){
+  const cep=document.getElementById('end_cep').value.replace(/\D/g,'');const st=document.getElementById('cepStatus');
+  if(cep.length!==8||cep===lastCep)return;lastCep=cep;
+  st.style.display='block';st.style.color='var(--muted)';st.textContent='Buscando endereço…';
+  const d=await fetchCepData(cep);
+  if(d&&(d.rua||d.cidade)){
+    if(d.rua)document.getElementById('end_rua').value=d.rua;
+    if(d.bairro)document.getElementById('end_bairro').value=d.bairro;
+    if(d.cidade)document.getElementById('end_cidade').value=d.cidade;
+    if(d.uf)document.getElementById('end_uf').value=d.uf;
+    st.style.color='var(--success)';st.textContent='Endereço encontrado ✓ — agora é só o número';
+    const num=document.getElementById('end_numero');if(num){num.focus();}        // pula para o Número
+    setTimeout(()=>{st.style.display='none';},2800);
+  }else{
+    st.style.color='var(--muted)';st.textContent='CEP não encontrado — preencha o endereço manualmente.';
+    setTimeout(()=>{st.style.display='none';},3200);
+  }
+}
+document.getElementById('end_cep').addEventListener('input',e=>{maskCep(e);const cep=e.target.value.replace(/\D/g,'');if(cep.length===8)handleCep();else lastCep='';});
+document.getElementById('end_cep').addEventListener('blur',handleCep);
+
+/* ===================== COLETA / STORAGE ===================== */
+function val(id){const e=document.getElementById(id);return e?e.value.trim():'';}
+function collectEspecificas(nome){const out={};(NUCLEOS[nome].fields||[]).forEach(f=>{if(f.type==='single'||f.type==='multi')out[f.key]=getOpt(f.key);else{const e=document.getElementById(f.key);out[f.key]=e?(f.type==='number'?(e.value?+e.value:''):e.value.trim()):'';}});return out;}
+function collect(){return{
+  id:Date.now().toString(36)+Math.random().toString(36).slice(2,7),criadoEm:Date.now(),protocolo:'ACS-'+Date.now().toString().slice(-6),
+  nucleo:currentNucleo,empresa_nome:val('empresa_nome'),empresa_fantasia:val('empresa_fantasia'),empresa_cnpj:val('empresa_cnpj'),
+  empresa_setor:val('empresa_setor'),num_funcionarios:+document.getElementById('num_funcionarios').value||0,empresa_porte:val('empresa_porte'),empresa_tempo:val('empresa_tempo'),
+  maioria_genero:getOpt('maioria_genero'),perfil_site:val('perfil_site'),perfil_instagram:val('perfil_instagram'),perfil_descricao:val('perfil_descricao'),
+  end_cep:val('end_cep'),end_rua:val('end_rua'),end_numero:val('end_numero'),end_complemento:val('end_complemento'),end_bairro:val('end_bairro'),end_cidade:val('end_cidade'),end_uf:val('end_uf').toUpperCase(),
+  resp_nome:val('resp_nome'),resp_cpf:val('resp_cpf'),resp_cargo:val('resp_cargo'),resp_email:val('resp_email'),resp_whatsapp:val('resp_whatsapp'),resp_genero:getOpt('resp_genero'),
+  aces_associada:getOpt('aces_associada'),aces_interesse:getOpt('aces_associada')==='Sim'?'Já associada':getOpt('aces_interesse'),aces_origem:getOpt('aces_origem'),
+  obs:val('obs'),lgpd:document.getElementById('lgpd').checked,especificas:collectEspecificas(currentNucleo)
+};}
+async function storageReady(){return typeof window!=='undefined'&&window.storage&&typeof window.storage.set==='function';}
+async function saveResponse(rec){if(await storageReady()){try{const r=await window.storage.set(STORE_PREFIX+rec.id,JSON.stringify(rec),SHARED);if(r)return{persisted:true};}catch(e){console.error(e);}}memoryStore[rec.id]=rec;return{persisted:false};}
+
+async function submitForm(){
+  const lgpd=document.getElementById('lgpd'),box=document.getElementById('consentBox'),errEl=document.getElementById('lgpdErr');
+  if(!lgpd.checked){box.classList.add('invalid');errEl.style.display='block';toast('Autorize o uso dos dados para enviar.');box.scrollIntoView({behavior:'smooth',block:'center'});return;}
+  box.classList.remove('invalid');errEl.style.display='none';
+  const btn=document.getElementById('submitBtn');btn.disabled=true;btn.innerHTML='Enviando…';
+  const rec=collect();
+  const [res,sheet]=await Promise.all([saveResponse(rec),sendToSheet(rec)]);
+  document.getElementById('protocolBox').textContent='Protocolo '+rec.protocolo;
+  document.getElementById('doneNucleo').textContent=rec.nucleo;
+  btn.disabled=false;btn.innerHTML='<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 13l4 4L19 7"/></svg> Enviar cadastro';
+  showScreen('screen-done');fireConfetti();
+  if(SHEETS_ENDPOINT){ if(sheet&&sheet.sent===false) toast('Cadastro salvo, mas falhou o envio à planilha. Confira a URL/implantação do script.'); }
+  else if(!res.persisted){ toast('Cadastro registrado nesta sessão (armazenamento permanente indisponível).'); }
+}
+function resetForm(){document.querySelectorAll('#screen-form input, #screen-form textarea').forEach(i=>{if(i.type==='checkbox')i.checked=false;else if(i.id==='end_cidade')i.value='Sinop';else if(i.id==='end_uf')i.value='MT';else i.value='';});document.querySelectorAll('#screen-form select').forEach(s=>s.selectedIndex=0);document.querySelectorAll('#screen-form .opt.selected').forEach(o=>o.classList.remove('selected'));document.querySelectorAll('#screen-form .invalid').forEach(f=>f.classList.remove('invalid'));document.querySelectorAll('.cnt').forEach(c=>c.textContent='');document.getElementById('interesseField').style.display='block';goHome();}
+
+/* ===================== CONFETE ===================== */
+function fireConfetti(){
+  const wrap=document.getElementById('confetti');const cols=['#2D5A8C','#1E7A7A','#2E8B57','#A33B53','#C5631A','#6A4C9C','#C2A05A'];
+  wrap.innerHTML='';wrap.classList.remove('go');
+  for(let i=0;i<22;i++){const s=document.createElement('i');const ang=Math.random()*Math.PI*2,dist=80+Math.random()*150;
+    s.style.setProperty('--dx',Math.cos(ang)*dist+'px');s.style.setProperty('--dy',(Math.sin(ang)*dist-40)+'px');s.style.setProperty('--rot',(Math.random()*540-270)+'deg');
+    s.style.background=cols[i%cols.length];s.style.animationDelay=(Math.random()*120)+'ms';if(Math.random()>.5)s.style.borderRadius='50%';wrap.appendChild(s);}
+  void wrap.offsetWidth;wrap.classList.add('go');
+}
+
+/* ===================== UTIL ===================== */
+let toastTimer;function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove('show'),3200);}
+
+/* INIT */
+document.getElementById('footYear').textContent=new Date().getFullYear();
+renderNucGrid();wireOptGroups();toggleInteresse();
+</script>
+</body>
+</html>
